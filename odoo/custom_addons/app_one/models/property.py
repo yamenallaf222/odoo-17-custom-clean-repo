@@ -3,13 +3,15 @@ from odoo.exceptions import ValidationError
 
 class Property(models.Model):
     _name = 'property'
-    _description = 'Property Record'
+    _description = 'Property'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(required=1, default='New')
     description = fields.Text(tracking=1)
     postcode = fields.Char(required=1)
     date_availability = fields.Date(tracking=1)
+    expected_selling_date = fields.Date(tracking=1)
+    is_late = fields.Boolean()
     expected_price = fields.Float()
     selling_price = fields.Float()
     diff = fields.Float(compute='_compute_diff', store=1)
@@ -35,11 +37,15 @@ class Property(models.Model):
         ('draft','Draft'),
         ('pending','Pending'),
         ('sold','Sold'),
+        ('closed','Closed'),
     ], default='draft')
 
     _sql_constraints = [
         ('unique_name', 'unique("name")', 'This name exists!')
     ]
+
+    line_ids = fields.One2many('property.line', inverse_name='property_id')
+    active = fields.Boolean(default=1)
 
     @api.depends('expected_price', 'selling_price', 'owner_id.phone')
     def _compute_diff(self):
@@ -82,6 +88,18 @@ class Property(models.Model):
             print("inside sold action")
             rec.state = 'sold'
 
+    def action_closed(self):
+        for rec in self:
+            rec.state = 'closed'
+
+    #self will be empty as it is triggered by an automated action
+    def check_expected_selling_date(self):
+        print(self)
+        #empty list [] meaning all records will be retrieved
+        property_ids = self.search([])
+        for rec in property_ids:
+            if rec.expected_selling_date and rec.expected_selling_date < fields.date.today():
+                rec.is_late = True
 
 
     # @api.model_create_multi
@@ -105,4 +123,12 @@ class Property(models.Model):
     #     res = super(Property, self).unlink()
     #     print("isnide unlink method")
     #     return res
+
+
+class PropertyLine(models.Model):
+    _name = 'property.line'
+
+    area = fields.Float()
+    description = fields.Char()
+    property_id = fields.Many2one('property')
 

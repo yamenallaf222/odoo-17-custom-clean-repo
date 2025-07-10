@@ -4,9 +4,10 @@
         <field name="name">property tree</field>
         <field name="model">property</field>
         <field name="arch" type="xml">
-            <tree class="header_custom">
+            <tree class="header_custom" decoration-danger="(is_late)">
                 <field name="name"/>
                 <field name="postcode"/>
+                <field name="is_late" invisible="1"/>
                 <field name="owner_id"/>
                 <field name="date_availability"/>
                 <field name="selling_price"/>
@@ -16,6 +17,7 @@
                 <field name= "garden_area"/>
                 <field name="bedrooms" optional="1"/>
                 <field name="garage" optional="1"/>
+                <field name="active"  optional="1"/>
             </tree>
         </field>
     </record>
@@ -45,6 +47,8 @@
                     <group>
                         <group string="General Info.">
                             <field name="date_availability" required="1"/>
+                            <field name="expected_selling_date"/>
+                            <field name="is_late" invisible="1"/>
                             <field name="postcode"/>
                             <field name="expected_price"/>
                             <field name="selling_price"/>
@@ -64,12 +68,23 @@
                             <field name="garden_area"/>
                             <field name="garage"/>                                
                             <field name="garden_orientation"/>
+                            <field name="active"/>
                             <field name="tag_ids" widget="many2many_tags"/>                                 
                         </group>
                     </group>
                     <group>
                         <field name="description" required="1"/>
                     </group>
+                    <notebook>
+                        <page string="Bedrooms">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="description"/>
+                                    <field name="area"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids"/>
@@ -102,6 +117,30 @@
         <field name="name">Property</field>
         <field name="res_model">property</field>
     </record>
+
+    <!-- <record id="property_closed_server_actions" model="ir.actions.server">
+        <field name = "name">Closed</field>
+        <field name="model_id" ref="model_property"/>
+        <field name="binding_model_id" ref="model_property"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = records.action_closed()
+        </field>
+    </record> -->
+
+    <record id="check_selling_date_cron" model="ir.cron">
+        <field name="name">Property: Check selling date</field>
+        <field name="model_id" ref="model_property"/>
+        <field name="state">code</field>
+        <field name="code">model.check_expected_selling_date()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <!-- -1 for unlimited number of calls -->
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+    </record>
+
+
     <menuitem 
         id="property_menu_item"
         name="Properties"

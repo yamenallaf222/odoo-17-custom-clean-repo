@@ -3,7 +3,7 @@
     'author' : "Muhammed Nasser",
     'category' : ' ',
     'version': '17.0.0.1.0',
-    'depends' : ['base', 'sale_management', 'mail'
+    'depends' : ['base', 'sale_management', 'mail', 'contacts'
                  ],
     'data': [
         'security/ir.model.access.csv',
@@ -13,6 +13,8 @@
         'views/tag_view.xml',
         'views/sale_order_view.xml',
         'views/all_tasks_view.xml',
+        'views/res_partner_view.xml',
+        'views/building_view.xml',
     ],
     'assets':{
         'web.assets_backend':['/app_one/static/source/css/property.css']
