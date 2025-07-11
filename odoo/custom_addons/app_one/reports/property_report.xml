@@ -1,0 +1,99 @@
+<odoo>
+    <record id="property_report" model="ir.actions.report">
+        <field name="name">Property Report</field>
+        <field name="model">property</field>
+        <!-- qweb-pdf is the default value for report_type -->
+        <field name="report_type">qweb-html</field>
+        <field name="binding_model_id" ref="model_property"/>
+        <field name="binding_type">report</field>
+
+        <!-- report_name has the id of the report template i want to be in use for this report -->
+         <!-- addon name prefix is required to point to the template id -->
+        <field name="report_name">app_one.property_report_template</field>
+    </record>
+
+    <!-- this id gotta be unique within each addon(app) -->
+    <template id="property_report_template">
+        <t t-call="web.html_container">
+            <!-- we ve got too built in layouts:
+            {"web.basic_layout" : just margins }, {"web.external_layout" : it's set in the setting
+             of odoo -> companies -> configure document layout} -->
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="rec">
+                    <h1>Property Report</h1>
+                    <style>
+                        table {
+                        width:100%;
+                        border:1px solid #b3adad;
+                        border-collapse:collapse;
+                        padding:5px;
+                        }
+
+                        table th {
+                        border:1px solid #b3adad;
+                        padding:5px;
+                        background: #f0f0f0;
+                        color: #313030;
+                        }
+
+                        table td {
+                        border:1px solid #b3adad;
+                        text-align:center;
+                        padding:5px;
+                        background: #ffffff;
+                        color: #313030;
+                        }
+
+                    </style>
+                    <table>
+                        <thead>
+                            <th colspan="4">General Information</th>
+                        </thead>
+                        <tbody>
+                            <td>Name</td>
+                            <td><t t-esc="rec.name"/></td>
+                            <td>Postcode</td>
+                            <td><t t-esc="rec.postcode"/></td>
+                        </tbody>
+
+                        <thead>
+                            <th colspan="4">Additional Information</th>
+                        </thead>
+                        <tbody>
+                            <td>Owner</td>
+                            <td><t t-esc="rec.owner_id.name"/></td>
+                            <td>Phone</td>
+                            <td><t t-esc="rec.owner_phone"/></td>
+                        </tbody>
+                    </table>
+                    <br/>
+                    <table>
+                        <thead>
+                            <th>Description</th>
+                            <th>Area(m2)</th>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="rec.line_ids" t-as="line">
+                                <tr>
+                                    <td>
+                                        <!-- i could use "t-field" attribute which 
+                                        cancels the necessity for the "t" tag being the holder of such attribute 
+                                        meaning any tag could work if i use "t-field" attribute
+                                        to achieve the same functionality of "t-esc" attribute  -->
+                                        <!-- one big advantage for "t-field" is that i could just give it 
+                                         a value of a say owner_id without explicitly typing owner_id.name
+                                         to actually get the name -->
+                                        <t t-esc="line.description"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="line.area"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>    
+            </t>
+        </t>
+    </template>
+</odoo>
