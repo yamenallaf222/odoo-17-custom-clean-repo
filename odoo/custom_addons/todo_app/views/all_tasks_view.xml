@@ -41,7 +41,7 @@
                     <group>
                         <field name="assign_to"/>
                         <field name="due_date"/>
-                        <field name="estimated_time"/>
+                        <field name="estimated_time" string="Estimated Time(H)"/>
                         <field name="active"/>
                         <field name="is_late" invisible="1"/>                        
                     </group>
