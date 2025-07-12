@@ -21,7 +21,14 @@ class TodoTask(models.Model):
     ], default='new', tracking=1)
     estimated_time = fields.Float(required=1, default=10.0)
     timesheet_line_ids = fields.One2many('timesheet.line', inverse_name='todo_task_id')
+    timesheet_lines_total_time = fields.Float(string="Total Time", compute="_compute_total_time", store="1")
+
     active = fields.Boolean(default=1)
+
+    @api.depends('timesheet_line_ids.time')
+    def _compute_total_time(self):
+        for rec in self:
+            rec.timesheet_lines_total_time = sum(rec.timesheet_line_ids.mapped('time'))
 
     @api.constrains('estimated_time')
     def _check_estimated_time_is_not_less_than_the_total_time_of_timesheet_lines(self):
@@ -70,7 +77,6 @@ class TimesheetLine(models.Model):
     date = fields.Date(required=1)
     description = fields.Text(required=1)
     time = fields.Float(required=1)
-
     todo_task_id = fields.Many2one('todo.task')
 
     @api.constrains('date')
@@ -78,6 +84,7 @@ class TimesheetLine(models.Model):
         for rec in self:
             if rec.date > rec.todo_task_id.due_date:
                 raise ValidationError("Please add valid Timesheet lines' time values: not bigger than task's due date")
+            
 
 
 

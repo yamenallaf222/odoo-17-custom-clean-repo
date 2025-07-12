@@ -1,0 +1,88 @@
+<odoo>
+    <record id="todo_task_report" model="ir.actions.report">
+        <field name="name">To-Do report</field>
+        <field name="model">todo.task</field>
+        <field name="report_type">qweb-html</field>
+        <field name="binding_model_id" ref="model_todo_task"/>
+        <field name="binding_type">report</field>
+        <field name="report_name">todo_app.todo_report_template</field>
+    </record>
+
+    <template id="todo_report_template">
+        <t t-call="web.html_container">
+            <div style= "padding: 10px; margin: 25%;">
+                <t t-call="web.external_layout">
+                    <hr/>
+                    <t t-foreach="docs" t-as="o">
+                    <div style="border: 1px solid black; padding: 5%;">
+                        <span style="font-size:20px;"><strong>TASK:</strong>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<span t-field="o.name"/></span>
+                        <br/>
+                        <span style="font-size=20px;"><strong>Due Date:</strong>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<span t-field="o.due_date"/></span>
+                        <br/>
+                        <span style="font-size=20px;"><strong>Assign To:</strong>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<span t-field="o.assign_to"/></span>
+                        <br/>
+                        <span style="font-size=20px;"><strong>Estimated Time:</strong>&#160;&#160;&#160;&#160;<span t-field="o.estimated_time"/> H</span>
+                        <br/>
+                        <br/>
+                        <span style="font-size=20px;"><strong>Description:</strong></span>
+                        <br/>
+                        <span style="overflow-wrap: break-word;"><span t-field="o.description"/>.</span>
+                        <br/>
+                        <br/>
+                        <style>
+                            table {
+                            width:100%;
+                            border:1px solid #b3adad;
+                            border-collapse:collapse;
+                            padding:5px;
+                            }
+
+                            table th {
+                            border:1px solid #b3adad;
+                            padding:5px;
+                            background: #f0f0f0;
+                            color: #313030;
+                            }
+
+                            table td {
+                            border:1px solid #b3adad;
+                            text-align:center;
+                            padding:5px;
+                            background: #ffffff;
+                            color: #313030;
+                            }
+
+                        </style>
+                        <table>
+                            <thead>
+                                <th style="text-align: center;" colspan="4">Timesheet</th>
+                            </thead>
+                            <thead style="text-align: center;">
+                                <th>#</th>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>time</th>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.timesheet_line_ids" t-as="line">
+                                    <tr>
+                                        <td><t t-esc="line.id"/></td>
+                                        <td><t t-esc="line.date"/></td>
+                                        <td><t t-esc="line.description"/></td>
+                                        <td><span><t t-esc="line.time"/> H</span></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+
+                            <tr>
+                                <td colspan="3">Total Time</td>
+                                <td><span><t t-esc="o.timesheet_lines_total_time"/> H</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                    </t>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>
