@@ -12,6 +12,7 @@ class TodoTask(models.Model):
     assign_to = fields.Many2many('res.partner', string='Assigned To', tracking=1)
     description = fields.Text(tracking=1)
     due_date = fields.Date(tracking=1)
+    is_late = fields.Boolean()
     status = fields.Selection([
         ('new','New'),
         ('in_progress','In Progress'),
@@ -52,6 +53,15 @@ class TodoTask(models.Model):
         for rec in self:
             print("inside closed action")
             rec.status = 'closed'
+
+    def check_due_date(self):
+        todo_task_ids = self.search([])
+        for rec in todo_task_ids:
+            if fields.date.today() > rec.due_date and (rec.status not in ('closed', 'completed') ):
+                rec.is_late = True
+            else:
+                rec.is_late = False
+
 
 class TimesheetLine(models.Model):
     _name = 'timesheet.line'

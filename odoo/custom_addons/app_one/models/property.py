@@ -102,6 +102,7 @@ class Property(models.Model):
                 rec.is_late = True
 
 
+
     # @api.model_create_multi
     # def create(self, vals):
     #     res = super(Property, self).create(vals)
