@@ -102,7 +102,7 @@ class Property(models.Model):
                 rec.is_late = True
 
     def action(self):
-        print(self.env)
+        print(self.env['owner'].search([]))
 
 
 
