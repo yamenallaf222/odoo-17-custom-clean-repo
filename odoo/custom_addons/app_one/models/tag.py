@@ -6,4 +6,4 @@ class Tag(models.Model):
     _name = 'tag'
 
 
-    name = fields.Char(required=1)
+    name = fields.Char(required=True)

@@ -6,9 +6,9 @@ class Property(models.Model):
     _description = 'Property'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char(required=1, default='New')
+    name = fields.Char(required=True, default='New')
     description = fields.Text(tracking=1)
-    postcode = fields.Char(required=1)
+    postcode = fields.Char(required=True)
     date_availability = fields.Date(tracking=1)
     expected_selling_date = fields.Date(tracking=1)
     is_late = fields.Boolean()
@@ -29,8 +29,8 @@ class Property(models.Model):
     ])
     owner_id = fields.Many2one('owner')
     tag_ids = fields.Many2many('tag')
-    owner_address = fields.Char(related='owner_id.address', readonly=0)
-    owner_phone = fields.Char(related='owner_id.phone', readonly=0)
+    owner_address = fields.Char(related='owner_id.address', readonly=False)
+    owner_phone = fields.Char(related='owner_id.phone', readonly=False)
 
 
     state = fields.Selection([
@@ -100,6 +100,9 @@ class Property(models.Model):
         for rec in property_ids:
             if rec.expected_selling_date and rec.expected_selling_date < fields.date.today():
                 rec.is_late = True
+
+    def action(self):
+        print(self.env)
 
 
 
