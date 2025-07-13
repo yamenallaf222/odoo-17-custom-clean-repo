@@ -8,7 +8,7 @@ class TodoTask(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
 
-    name = fields.Char(required=1, default='New', tracking=1)
+    name = fields.Char(required=True, default='New', tracking=1)
     assign_to = fields.Many2many('res.partner', string='Assigned To', tracking=1)
     description = fields.Text(tracking=1)
     due_date = fields.Date(tracking=1)
@@ -19,7 +19,7 @@ class TodoTask(models.Model):
         ('completed','Completed'),
         ('closed','Closed'),
     ], default='new', tracking=1)
-    estimated_time = fields.Float(required=1, default=10.0)
+    estimated_time = fields.Float(required=True, default=10.0)
     timesheet_line_ids = fields.One2many('timesheet.line', inverse_name='todo_task_id')
     timesheet_lines_total_time = fields.Float(string="Total Time", compute="_compute_total_time", store="1")
 
@@ -74,9 +74,9 @@ class TimesheetLine(models.Model):
     _name = 'timesheet.line'
     _description = "Timesheet lines"
 
-    date = fields.Date(required=1)
-    description = fields.Text(required=1)
-    time = fields.Float(required=1)
+    date = fields.Date(required=True)
+    description = fields.Text(required=True)
+    time = fields.Float(required=True)
     todo_task_id = fields.Many2one('todo.task')
 
     @api.constrains('date')
