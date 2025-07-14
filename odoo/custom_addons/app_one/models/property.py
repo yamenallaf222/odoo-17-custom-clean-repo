@@ -121,8 +121,13 @@ class Property(models.Model):
                 'property_id' : rec.id,
                 'old_state' : old_state,
                 'new_state' : new_state,
-                'reason' : reason or ""
-            })
+                'reason' : reason or "",
+                # using command tuple(magic tuple) : first element being 0 means gonna create
+                # record, second elemnt means i am creating a non existent record
+                # the history_id is not needed to added to the creation here 
+                # as it will be automatically set for the property.history.line record
+                'line_ids' : [(0, 0, {'description' : line.description, 'area' : line.area}) for line in rec.line_ids],
+            }) 
 
     def action_open_change_state_wizard(self):
         action = self.env['ir.actions.actions']._for_xml_id('app_one.change_state_wizard_action')
