@@ -51,6 +51,8 @@
                     </div>
                     <group>
                         <group string="General Info.">
+                            <field name="create_time" readonly="True"/>
+                            <field name="next_time"/>
                             <field name="date_availability" required="1" readonly="state == 'closed'"/>
                             <field name="expected_selling_date" readonly="state == 'closed'"/>
                             <field name="is_late" invisible="1" readonly="state == 'closed'"/>

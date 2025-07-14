@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+from datetime import timedelta
 
 class Property(models.Model):
     _name = 'property'
@@ -32,7 +33,8 @@ class Property(models.Model):
     tag_ids = fields.Many2many('tag')
     owner_address = fields.Char(related='owner_id.address', readonly=False)
     owner_phone = fields.Char(related='owner_id.phone', readonly=False)
-
+    create_time = fields.Datetime(default=fields.Datetime.now())
+    next_time = fields.Datetime(compute='_compute_next_time')
 
     state = fields.Selection([
         ('draft','Draft'),
@@ -47,6 +49,14 @@ class Property(models.Model):
 
     line_ids = fields.One2many('property.line', inverse_name='property_id')
     active = fields.Boolean(default=1)
+
+    @api.depends('create_time')
+    def _compute_next_time(self):
+        for rec in self:
+            if rec.create_time:
+                rec.next_time = rec.create_time + timedelta(hours=6)
+            else:
+                rec.next_time = False
 
     @api.depends('expected_price', 'selling_price', 'owner_id.phone')
     def _compute_diff(self):
