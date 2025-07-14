@@ -82,7 +82,7 @@
                     </group>
                     <notebook>
                         <page string="Bedrooms">
-                            <field name="line_ids" readonly="state == 'closed">
+                            <field name="line_ids" readonly="state == 'closed'">
                                 <tree editable="bottom">
                                     <field name="description"/>
                                     <field name="area"/>
