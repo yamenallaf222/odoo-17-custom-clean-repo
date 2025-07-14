@@ -1,0 +1,30 @@
+<odoo>
+    <record id="change_state_wizard_view_form" model="ir.ui.view">
+        <field name="name">change state wizard form</field>
+        <field name="model">change.state</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="property_id" invisible="True"/>
+                    <field name="state" required="True"/>
+                    <field name="reason" required="True"/>
+                </group>
+                <!-- in <footer> we add buttons -->
+                <footer>
+                    <!-- name attribute equals the method in the py file -->
+                    <button string="Confirm" type="object" name="action_confirm" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="change_state_wizard_action" model="ir.actions.act_window">
+        <field name="name">Change State Wizard</field>
+        <field name="res_model">change.state</field>
+        <!-- this target field gonna show me the pop up window of the wizard -->
+        <field name="target">new</field>
+        <field name="view_mode">form</field>
+    </record>
+</odoo>

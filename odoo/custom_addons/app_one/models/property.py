@@ -7,6 +7,7 @@ class Property(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(required=True, default='New')
+    ref = fields.Char(default="New", readonly=True)
     description = fields.Text(tracking=1)
     postcode = fields.Char(required=True)
     date_availability = fields.Date(tracking=1)
@@ -74,22 +75,24 @@ class Property(models.Model):
     def action_draft(self):
         for rec in self:
             print("inside draft action")
+            rec.create_history_record(rec.state, 'draft')
             rec.state = 'draft'
 
     def action_pending(self):
         for rec in self:
             print("inside pending action")
-            rec.write({
-                'state':'pending'
-            })
+            rec.create_history_record(rec.state, 'pending')
+            rec.state = 'pending'
 
     def action_sold(self):
         for rec in self:
             print("inside sold action")
+            rec.create_history_record(rec.state, 'sold')
             rec.state = 'sold'
 
     def action_closed(self):
         for rec in self:
+            rec.create_history_record(rec.state, 'closed')
             rec.state = 'closed'
 
     #self will be empty as it is triggered by an automated action
@@ -104,30 +107,28 @@ class Property(models.Model):
     def action(self):
         print(self.env['owner'].search([]))
 
+    @api.model
+    def create(self, vals):
+        res = super(Property, self).create(vals)
+        if res.ref == 'New':
+            res.ref = self.env['ir.sequence'].next_by_code('property_seq')
+        return res
 
+    def create_history_record(self, old_state, new_state, reason):
+        for rec in self:
+            rec.env['property.history'].create({
+                'user_id' : rec.env.uid,
+                'property_id' : rec.id,
+                'old_state' : old_state,
+                'new_state' : new_state,
+                'reason' : reason or ""
+            })
 
-    # @api.model_create_multi
-    # def create(self, vals):
-    #     res = super(Property, self).create(vals)
-    #     print("inside create method")
-    #     return res
-
-    # @api.model
-    # def _search(self, domain, offset=0, limit=None, order=None, access_rights_uid=None):
-    #     res = super(Property, self)._search(domain, offset, limit, order, access_rights_uid)
-    #     print ("inside search method")
-    #     return res
+    def action_open_change_state_wizard(self):
+        action = self.env['ir.actions.actions']._for_xml_id('app_one.change_state_wizard_action')
+        action['context'] = {'default_property_id': self.id}
+        return action
     
-    # def _write(self, vals):
-    #     res = super(Property, self)._write(vals)
-    #     print("inside write method")
-    #     return res
-    
-    # def unlink(self):
-    #     res = super(Property, self).unlink()
-    #     print("isnide unlink method")
-    #     return res
-
 
 class PropertyLine(models.Model):
     _name = 'property.line'
