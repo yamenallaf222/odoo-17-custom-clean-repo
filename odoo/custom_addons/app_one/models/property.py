@@ -115,7 +115,11 @@ class Property(models.Model):
                 rec.is_late = True
 
     def action(self):
-        print(self.env['owner'].search([]))
+        # these search domain tuples have three values each 
+        # ilike logical operator will return just as like operator but being case
+        # insensitive
+        # [('name', '=', 'Property3')]
+        print(self.env['property'].search(['!', ('name', '=', 'Property3'), ('postcode', '=', '12345')]))
 
     @api.model
     def create(self, vals):
