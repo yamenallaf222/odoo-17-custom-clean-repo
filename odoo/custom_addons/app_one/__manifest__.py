@@ -6,6 +6,7 @@
     'depends' : ['base', 'sale_management', 'mail', 'contacts'
                  ],
     'data': [
+        'security/security.xml',
         'security/ir.model.access.csv',
         'data/sequence.xml',
         'views/base_menu.xml',
