@@ -28,6 +28,9 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <!-- text-bg-danger is a bootstrap class -->
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <widget name="web_ribbon" title="Sold" bg_color="text-bg-success" invisible="state != 'sold'"/>
                     <header>
                         <button name="action" type="object" class="btn-primary" string="Action"/>
                         <button name="action_draft" type="object" class="btn-primary" string="Set To Draft"
