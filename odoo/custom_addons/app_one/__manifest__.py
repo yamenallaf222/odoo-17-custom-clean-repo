@@ -23,7 +23,8 @@
         'reports/property_report.xml',
     ],
     'assets':{
-        'web.assets_backend':['/app_one/static/source/css/property.css']
+        'web.assets_backend':['/app_one/static/source/css/property.css'],
+        'web.report_assets_common':['/app_one/static/source/css/font.css'],
     },
     'application': True,
 }

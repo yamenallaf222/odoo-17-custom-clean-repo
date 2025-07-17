@@ -20,7 +20,7 @@
              of odoo -> companies -> configure document layout} -->
             <t t-call="web.external_layout">
                 <t t-foreach="docs" t-as="rec">
-                    <h1>Property Report</h1>
+                    <h1 style="font-family: 'Workbench';">Property Report</h1>
                     <style>
                         table {
                         width:100%;
