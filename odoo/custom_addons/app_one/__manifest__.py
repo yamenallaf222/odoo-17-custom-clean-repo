@@ -3,7 +3,8 @@
     'author' : "Muhammed Nasser",
     'category' : ' ',
     'version': '17.0.0.1.0',
-    'depends' : ['base', 'sale_management', 'mail', 'contacts'
+    # account module instead of account_accountant for community odoo
+    'depends' : ['base', 'sale_management', 'account', 'mail', 'contacts'
                  ],
     'data': [
         'security/security.xml',
@@ -17,6 +18,7 @@
         'views/res_partner_view.xml',
         'views/building_view.xml',
         'views/property_history_view.xml',
+        'views/account_move_view.xml',
         'wizard/change_state_wizard_view.xml',
         'reports/property_report.xml',
     ],
