@@ -77,10 +77,8 @@
                             <field name="owner_id" readonly="state == 'closed'"/>
                             <field name="owner_address" readonly="state == 'closed'"/>
                             <field name="owner_phone" readonly="state == 'closed'"/>
-                            <field name="owner_id" readonly="state == 'closed'"/>
                             <field name= "garden_area" readonly="state == 'closed'"/>
                             <field name="garden" readonly="state == 'closed'"/>
-                            <field name="garden_area" readonly="state == 'closed'"/>
                             <field name="garage" readonly="state == 'closed'"/>
                             <field name="garden_orientation" readonly="state == 'closed'"/>
                             <field name="active" readonly="state == 'closed'"/>
