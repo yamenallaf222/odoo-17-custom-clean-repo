@@ -3,6 +3,7 @@ import math
 from urllib.parse import parse_qs
 from odoo import http
 from odoo.http import request
+from odoo.exceptions import ValidationError
 
 
 def valid_response(data, status, pagination_info):
@@ -14,7 +15,7 @@ def valid_response(data, status, pagination_info):
 
     if pagination_info:
         response_body['pagination_info'] = pagination_info
-        
+
     return request.make_json_response(response_body, status=status)
 
 def invalid_response(error, status):
@@ -24,6 +25,12 @@ def invalid_response(error, status):
 
      return request.make_json_response(response_body, status=status)
      
+def is_valid_json(json_string):
+    try:
+        json.loads(json_string)
+        return True
+    except ValueError:
+        return False
 
 class PropertyApi(http.Controller):
 
@@ -36,6 +43,28 @@ class PropertyApi(http.Controller):
 
          
 
+    # @http.route("/v1/property", method=["POST"], type="http", auth="none", csrf=False)
+    # def post_property(self):
+    #     args = request.httprequest.data.decode()
+    #     vals = json.loads(args)
+    #     if not self.validate_name_field_existence(vals):
+    #         return request.make_json_response({
+    #             "error": "Name is required!", 
+    #         }, status=400) 
+    #     try:
+    #         res = request.env['property'].sudo().create(vals)
+    #         if res:
+    #             return request.make_json_response({
+    #                 "error": "Property has been created successfully", 
+    #                 "id" : res.id,
+    #                 "name" : res.name,
+    #                 #201 code mean success for creation operation
+    #             }, status=201)
+    #     except Exception as error:
+    #             return request.make_json_response({
+    #                 "error": error, 
+    #             }, status=400)
+
     @http.route("/v1/property", method=["POST"], type="http", auth="none", csrf=False)
     def post_property(self):
         args = request.httprequest.data.decode()
@@ -45,18 +74,33 @@ class PropertyApi(http.Controller):
                 "error": "Name is required!", 
             }, status=400) 
         try:
-            res = request.env['property'].sudo().create(vals)
+            # res = request.env['property'].sudo().create(vals)
+
+            cr = request.env.cr
+            columns = ', '.join(vals.keys())
+            values = ', '.join(['%s'] * len(vals)) 
+            query = f"""INSERT INTO property ({columns}) VALUES ({values}) RETURNING id, name, postcode"""
+
+            if "name" in vals.keys():
+                if not is_valid_json(vals["name"]):
+                    raise ValidationError("the name is not a valid json format it is required to provide as {\"en_US\", NAME}")           
+            
+            cr.execute(query, tuple(vals.values()))
+            res = cr.fetchone()
+            print(res)
             if res:
                 return request.make_json_response({
-                    "error": "Property has been created successfully", 
-                    "id" : res.id,
-                    "name" : res.name,
+                    "message": "Property has been created successfully", 
+                    "id" : res[0],
+                    "name" : res[1],
+                    "postcode" : res[2]
                     #201 code mean success for creation operation
                 }, status=201)
         except Exception as error:
                 return request.make_json_response({
                     "error": error, 
                 }, status=400)
+
 
         
     @http.route("/v1/property/json", method=["POST"], type="json", auth="none", csrf=False)
