@@ -1,6 +1,29 @@
 import json
+import math
+from urllib.parse import parse_qs
 from odoo import http
 from odoo.http import request
+
+
+def valid_response(data, status, pagination_info):
+     
+    response_body = {  
+    'message' : 'successful',   
+    'data' : data
+    }
+
+    if pagination_info:
+        response_body['pagination_info'] = pagination_info
+        
+    return request.make_json_response(response_body, status=status)
+
+def invalid_response(error, status):
+     response_body = {
+          'error' : error
+     }
+
+     return request.make_json_response(response_body, status=status)
+     
 
 class PropertyApi(http.Controller):
 
@@ -76,20 +99,66 @@ class PropertyApi(http.Controller):
         try:
             property_id = request.env['property'].sudo().search([('id', '=', property_id)])
             if not property_id:
-                return request.make_json_response({
-                    "error": "There is no property that match this ID", 
-                }, status=400)
+                return invalid_response("There is no property that match this ID", status=400)
                 
-            return request.make_json_response({
+            return valid_response({
                       "id": property_id.id ,
                       "name" : property_id.name,
                       "ref" : property_id.ref,
                       "description" : property_id.description,
                       "bedrooms" : property_id.bedrooms
-            })
+            }, status=200)
             
         except Exception as error:
                 return request.make_json_response({
                     "error": error, 
                 }, status=400)
 
+
+    @http.route("/v1/properties", methods=["GET"], type="http", auth="none", csrf=False)
+    def get_property_list(self):
+        try:
+            params = parse_qs(request.httprequest.query_string.decode('utf-8'))
+            print("\n\n")
+            print(params)
+            property_domain = []
+            page = offset = None
+            limit = 5
+            if params:   
+                if(params.get('limit')):
+                    limit = int(params.get('limit')[0])
+
+                if(params.get('page')):
+                    page = int(params.get('page')[0])
+
+            if page:
+                offset = (page * limit) - limit     
+            if params.get('state'):
+                property_domain += [('state', '=', params.get('state')[0])]
+            print(property_domain)
+
+            property_ids = request.env['property'].sudo().search(property_domain, offset=offset, limit=limit, order='id desc')
+            property_count = request.env['property'].sudo().search_count(property_domain)
+
+            if not property_ids:
+                return request.make_json_response({
+                    "error": "There are not records", 
+                }, status=400)
+                
+            return valid_response([{
+                      "id": property_id.id ,
+                      "name" : property_id.name,
+                      "ref" : property_id.ref,
+                      "description" : property_id.description,
+                      "bedrooms" : property_id.bedrooms
+            } for property_id in property_ids], pagination_info={
+                'page' : page if page else 1,
+                'limit' : limit,
+                'pages' : math.ceil(property_count / limit) if limit else 1,
+                'count' : property_count
+            }, status=200)
+            
+        except Exception as error:
+                return request.make_json_response({
+                    "error": error, 
+                }, status=400)
