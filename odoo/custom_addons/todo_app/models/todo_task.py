@@ -7,7 +7,7 @@ class TodoTask(models.Model):
     _description = 'Todo Task Record'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-
+    ref = fields.Char(default='New', readonly=True)
     name = fields.Char(required=True, default='New', tracking=1)
     assign_to = fields.Many2many('res.partner', string='Assigned To', tracking=1)
     description = fields.Text(tracking=1)
@@ -69,6 +69,12 @@ class TodoTask(models.Model):
             else:
                 rec.is_late = False
 
+    @api.model
+    def create(self, vals):
+        res = super(TodoTask, self).create(vals)
+        if res.ref == 'New':
+            res.ref = self.env['ir.sequence'].next_by_code('todo_seq')         
+        return res
 
 class TimesheetLine(models.Model):
     _name = 'timesheet.line'
@@ -84,7 +90,8 @@ class TimesheetLine(models.Model):
         for rec in self:
             if rec.date > rec.todo_task_id.due_date:
                 raise ValidationError("Please add valid Timesheet lines' time values: not bigger than task's due date")
-            
+
+
 
 
 

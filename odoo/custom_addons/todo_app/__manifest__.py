@@ -7,6 +7,7 @@
                  ],
     'data': [
         'security/ir.model.access.csv',
+        'data/sequence.xml',
         'views/base_menu.xml',
         'views/all_tasks_view.xml',
         'reports/todo_task_report.xml'
