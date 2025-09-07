@@ -86,6 +86,18 @@
         </field>
     </record>
 
+    <record id="bulk_task_assignment_server_action" model="ir.actions.server">
+        <field name="name">Assign bulk tasks</field>
+        <field name="model_id" ref="model_todo_task"/>
+        <field name="binding_model_id" ref="model_todo_task"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = records.action_open_bulk_task_assignment_wizard()
+        </field>
+        <!-- to restrict it to tree view server actions -->
+        <field name="binding_view_types">list</field>
+    </record>
+
     <record id="todo_task_check_due_date_cron_action" model="ir.cron">
         <field name="name">Todo-Task: check due date</field>
         <field name="model_id" ref="model_todo_task"/>

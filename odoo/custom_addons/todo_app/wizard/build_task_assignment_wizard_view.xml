@@ -1,0 +1,27 @@
+<odoo>
+    <record id="bulk_task_assignment_wizard_view_form" model="ir.ui.view">
+        <field name="name">bulk task assignment wizard form</field>
+        <field name="model">bulk.task.assignment</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="assignee" required="1"/>
+                    <field name="tasks" required="1"/>
+                </group>
+                <footer>
+                    <button string="Confirm" type="object" name="action_confirm" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="bulk_task_assignment_wizard_action" model="ir.actions.act_window">
+        <field name="name">Bulk task assignment</field>
+        <field name="res_model">bulk.task.assignment</field>
+        <!-- this target field shows the pop-up -->
+        <field name="target">new</field>
+        <field name="view_mode">form</field>
+    </record>
+</odoo>

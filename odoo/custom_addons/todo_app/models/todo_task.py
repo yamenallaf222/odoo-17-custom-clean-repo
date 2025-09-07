@@ -75,6 +75,11 @@ class TodoTask(models.Model):
         if res.ref == 'New':
             res.ref = self.env['ir.sequence'].next_by_code('todo_seq')         
         return res
+    
+    def action_open_bulk_task_assignment_wizard(self):
+        action = self.env['ir.actions.actions']._for_xml_id('todo_app.bulk_task_assignment_wizard_action')
+        action['context'] = {'default_tasks' : self.ids }
+        return action
 
 class TimesheetLine(models.Model):
     _name = 'timesheet.line'
