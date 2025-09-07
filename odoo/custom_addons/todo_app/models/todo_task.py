@@ -76,6 +76,13 @@ class TodoTask(models.Model):
             res.ref = self.env['ir.sequence'].next_by_code('todo_seq')         
         return res
     
+    def write(self, vals):
+
+        if(self.status == 'completed' or self.status == 'closed'):
+            raise ValidationError('Sorry, you can not update this task as it has been finished.')
+        res = super(TodoTask, self).write(vals)
+        return res
+    
     def action_open_bulk_task_assignment_wizard(self):
         action = self.env['ir.actions.actions']._for_xml_id('todo_app.bulk_task_assignment_wizard_action')
         action['context'] = {'default_tasks' : self.ids }

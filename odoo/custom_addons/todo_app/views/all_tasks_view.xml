@@ -39,38 +39,40 @@
 
                         <label for="name"/>
                         <h3>
-                            <field name="name"/>
+                            <field name="name" readonly="status == 'closed' or status == 'completed'"/>
                         </h3>
 
                     </div>
                     <group>
-                        <field name="assign_to"/>
-                        <field name="due_date"/>
-                        <field name="estimated_time" string="Estimated Time(H)"/>
-                        <field name="active"/>
-                        <field name="is_late" invisible="1"/>                        
+                        <field name="status" invisible="1"/>
+                        <field name="assign_to" readonly="status == 'closed' or status == 'completed'"/>
+                        <field name="due_date" readonly="status == 'closed' or status == 'completed'"/>
+                        <field name="estimated_time" string="Estimated Time(H)" readonly="status == 'closed' or status == 'completed'"/>
+                        <field name="active" readonly="status == 'closed' or status == 'completed'"/>
+                        <field name="is_late" invisible="1" readonly="status == 'closed' or status == 'completed'"/>                        
                     </group>
 
                     <group>
-                        <field name="description"/>
+                        <field name="description" readonly="status == 'closed' or status == 'completed'"/>
                     </group>
                     <notebook>
                         <page string="Sub-task">
-                            <field name="timesheet_line_ids">
+                            <field name="timesheet_line_ids" readonly="status == 'closed' or status == 'completed'">
                                 <tree editable="bottom">
                                     <field name="id" editable="0"/>
-                                    <field name="date"/>
-                                    <field name="description"/>
-                                    <field name="time" string="Time(H)"/>
+                                    <field name="date" />
+                                    <field name="description" />
+                                    <field name="time" string="Time(H)" />
                                 </tree>
                             </field>
                         </page>
                     </notebook>
                 </sheet>
                 <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
+                    <field name="status" invisible="1"/>
+                    <field name="message_follower_ids" readonly="status == 'closed' or status == 'completed'"/>
+                    <field name="activity_ids" readonly="status == 'closed' or status == 'completed'"/>
+                    <field name="message_ids" readonly="status == 'closed' or status == 'completed'"/>
                 </div>
             </form>
         </field>
