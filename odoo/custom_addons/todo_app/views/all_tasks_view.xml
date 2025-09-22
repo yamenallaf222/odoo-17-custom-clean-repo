@@ -24,9 +24,9 @@
                 <sheet>
                     <header>
                         <button name="action_new" type="object" class="btn-primary" string="Set To New"
-                                invisible="status == 'new'"/>
+                                invisible="status == 'new' or status == 'completed' or status == 'closed' or user_is_read_only"/>
                         <button name="action_in_progress" type="object" class="btn-secondary" string="In Progress"
-                                invisible="status != 'new'"/>
+                                invisible="status != 'new' or user_is_read_only"/>
                         <button name="action_completed" type="object" class="btn-success" string="Completed"
                                 invisible="status != 'in_progress'"/>
                         <field name="status" widget="statusbar"/>
@@ -44,6 +44,7 @@
 
                     </div>
                     <group>
+                        <field name="user_is_read_only" invisible="1"/>
                         <field name="status" invisible="1"/>
                         <field name="assign_to" readonly="status == 'closed' or status == 'completed'"/>
                         <field name="due_date" readonly="status == 'closed' or status == 'completed'"/>
@@ -83,6 +84,7 @@
         <field name="model_id" ref="model_todo_task"/>
         <field name="binding_model_id" ref="model_todo_task"/>
         <field name="state">code</field>
+        <field name="groups_id" eval="[(4, ref('todo_app.tasks_managers_group')), (3, ref('todo_app.tasks_users_group'))]"/>
         <field name="code">
             action = records.action_closed()
         </field>
@@ -93,6 +95,7 @@
         <field name="model_id" ref="model_todo_task"/>
         <field name="binding_model_id" ref="model_todo_task"/>
         <field name="state">code</field>
+        <field name="groups_id" eval="[(4, ref('todo_app.tasks_managers_group')), (3, ref('todo_app.tasks_users_group'))]"/>
         <field name="code">
             action = records.action_open_bulk_task_assignment_wizard()
         </field>

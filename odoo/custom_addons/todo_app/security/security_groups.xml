@@ -1,0 +1,9 @@
+<odoo>
+    <record id="tasks_managers_group" model="res.groups">
+        <field name="name">Tasks Managers</field>
+    </record>
+
+    <record id="tasks_users_group" model="res.groups">
+        <field name="name">Tasks Users</field>
+    </record>
+</odoo>

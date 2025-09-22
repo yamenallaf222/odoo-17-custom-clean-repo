@@ -22,8 +22,14 @@ class TodoTask(models.Model):
     estimated_time = fields.Float(required=True, default=10.0)
     timesheet_line_ids = fields.One2many('timesheet.line', inverse_name='todo_task_id')
     timesheet_lines_total_time = fields.Float(string="Total Time", compute="_compute_total_time", store="1")
+    user_is_read_only = fields.Boolean(compute='_compute_user_is_read_only', store=False)
 
     active = fields.Boolean(default=1)
+
+    # only to make xml view have the user value
+    def _compute_user_is_read_only(self):
+        for rec in self:
+            rec.user_is_read_only = self.env.user.has_group('todo_app.tasks_users_group')
 
     @api.depends('timesheet_line_ids.time')
     def _compute_total_time(self):
@@ -42,11 +48,15 @@ class TodoTask(models.Model):
     def action_new(self):
         for rec in self:
             print("inside new action")
+            if rec.user_is_read_only:
+                return ValidationError('can not set status to new because the user has user_group level permissions.')
             rec.status = 'new'
 
     def action_in_progress(self):
         for rec in self:
             print("inside in_progress action")
+            if rec.user_is_read_only:
+                return ValidationError('can not set status to in_progress because the user has user_group level permissions.')
             rec.write({
                 'status':'in_progress'
             })
@@ -54,11 +64,15 @@ class TodoTask(models.Model):
     def action_completed(self):
         for rec in self:
             print("inside completed action")
+            if rec.user_is_read_only and rec.status != 'in_progress':
+                return ValidationError('can not set status to completed because the user has user_group level permissions which is valid only when the previous status is In Progress.')
             rec.status = 'completed'
 
     def action_closed(self):
         for rec in self:
             print("inside closed action")
+            if rec.user_is_read_only:
+                return ValidationError('can not set status to completed because the user has user_group level permissions.')
             rec.status = 'closed'
 
     def check_due_date(self):
