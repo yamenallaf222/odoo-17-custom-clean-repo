@@ -5,6 +5,9 @@
         <field name="model">property</field>
         <field name="arch" type="xml">
             <tree class="header_custom" decoration-danger="(is_late)">
+                <header>
+                    <button name="property_xlsx_report" type="object" string="Print Excel report" class="btn-primary"/>
+                </header>
                 <field name="name"/>
                 <field name="postcode"/>
                 <field name="is_late" invisible="1"/>
