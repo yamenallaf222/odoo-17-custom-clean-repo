@@ -1,7 +1,7 @@
 /* @odoo-module */
 
 
-import { Component, useState } from "@odoo/owl";
+import { Component, useState, onWillUnmount } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 
@@ -16,6 +16,10 @@ export class ListViewAction extends Component {
         this.orm = useService("orm");
         this.rpc = useService("rpc");
         this.loadRecords();
+
+        this.loadRecordsIntervalId = setInterval(() => {this.loadRecords()}, 3000);
+        
+        onWillUnmount(() => {clearInterval(this.loadRecordsIntervalId)});
     };
 
     // async loadRecords() {
