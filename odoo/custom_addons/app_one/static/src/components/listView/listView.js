@@ -34,9 +34,33 @@ export class ListViewAction extends Component {
             method: "search_read",
             args: [[]],
             kwargs: {fields: ['id', 'name', 'postcode', 'date_availability']}
-        })
+        });
         console.log(result);
         this.state.records = result;
+    }
+
+    async createRecord() {
+        await this.rpc("/web/dataset/call_kw/", {
+            model: "property",
+            method: "create",
+            args:[{
+                name: "new property",
+                postcode: "1423232",
+                date_availability: "2024-04-24"
+            }],
+            kwargs: {}
+        });
+        this.loadRecords();
+    }
+
+    async deleteRecord(recordId) {
+        await this.rpc("/web/dataset/call_kw/", {
+            model: "property",
+            method: "unlink",
+            args:[recordId],
+            kwargs: {}
+        });
+        this.loadRecords();
     }
 }
 
