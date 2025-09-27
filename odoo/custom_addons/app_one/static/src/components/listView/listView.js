@@ -4,9 +4,11 @@
 import { Component, useState, onWillUnmount } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
+import { FormView } from "@app_one/components/formView/formView";
 
 export class ListViewAction extends Component {
     static template = "app_one.ListView";
+    static components = {FormView};
 
     // this is more of a constructor with no args
     setup() {
@@ -18,7 +20,12 @@ export class ListViewAction extends Component {
         this.loadRecords();
 
         this.loadRecordsIntervalId = setInterval(() => {this.loadRecords()}, 3000);
-        
+
+        //as in the FormView tag in listView.xml we are making this function a property of FormView-
+        //thus we can call it from formView.js but this property function loading we'll be more of a code pasting-
+        //making the this pointer in the function code allude to this pertaining formView and not ListView-
+        //making loadRecords function call in onRecordCreated be unrecognizable so this fixes it
+        this.onRecordCreated = this.onRecordCreated.bind(this);
         onWillUnmount(() => {clearInterval(this.loadRecordsIntervalId)});
     };
 
@@ -37,7 +44,7 @@ export class ListViewAction extends Component {
         });
         console.log(result);
         this.state.records = result;
-    }
+    };
 
     async createRecord() {
         await this.rpc("/web/dataset/call_kw/", {
@@ -51,7 +58,7 @@ export class ListViewAction extends Component {
             kwargs: {}
         });
         this.loadRecords();
-    }
+    };
 
     async deleteRecord(recordId) {
         await this.rpc("/web/dataset/call_kw/", {
@@ -61,6 +68,16 @@ export class ListViewAction extends Component {
             kwargs: {}
         });
         this.loadRecords();
+    };
+
+    toggleCreateForm() {
+        console.log("inside toggleCreateForm method");
+        this.state.showCreateForm = !this.state.showCreateForm;
+    };
+
+    onRecordCreated() {
+        this.loadRecords();
+        this.state.showCreateForm = false;
     }
 }
 

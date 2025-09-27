@@ -4,8 +4,15 @@
     <t t-name="app_one.ListView">
         <h1>Properties List</h1>
 
-        <button class="btn btn-primary m-1 p-1" t-on-click="createRecord">Create record</button>
+        <button class="btn btn-primary m-1 p-1" t-on-click="toggleCreateForm">
+            <t t-if="state.showCreateForm">Close</t>
+            <t t-else="">New</t>
+        </button>
 
+        <t t-if="state.showCreateForm">
+            <!-- the onCancel att here is just doing the same binding present for onRecordCreated in listView.js-->
+            <FormView onRecordCreated="onRecordCreated" onCancel="toggleCreateForm.bind(this)"/>
+        </t>
         <div class="o_list_view table-responsive">
             <table class="o_list_view table table-sm table-hover table-striped">
                 <thead>
