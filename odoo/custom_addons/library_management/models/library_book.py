@@ -1,0 +1,41 @@
+from odoo import models, fields, api, SUPERUSER_ID
+
+class LibraryBook(models.Model):
+    _name = 'library.book'
+    _description = 'Library Book'
+
+    title = fields.Char(required=True, default='New')
+    author = fields.Char(required=True, default='Author')
+    isbn = fields.Text(required=True, default='x'*10)
+    category = fields.Many2one('book.category', string='Book category', ondelete='set null')
+    #depreciation controls availability status by rendering the book invaluable if it hits higher or equal to 80 percent thus being Removed
+    depreciation = fields.Float(default=0, help='0-100%', readonly=True)
+    depreciation_rate = fields.Float(required=True, default=0.0913)
+    availability_status = fields.Selection(
+        ('available', 'Available'),
+        ('borrowed', 'Borrowed'),
+        ('reserved', 'Reserved'),
+        ('removed', 'Removed')  
+    , default='available', readonly=True)
+    acquisition_date = fields.Date(default=fields.Date.context_today, readonly=True)
+
+    def update_depreciation(self):
+        currentDate = fields.Date.context_today()
+        daysPassedSinceAcquisition = currentDate - self.acquisition_date
+        self.depreciation = min(100, self.depreciation_rate * daysPassedSinceAcquisition)
+
+    def _create_depreciation_cron(self):
+        self.env['ir.cron'].sudo().create({
+            'name': 'Update book depreciation',
+            'model_id': self.env['ir.model']._get('library.book').id,
+            'state': 'code',
+            'code': 'model.update_depreciation()',
+            'interval_number': 1,
+            'interval_type': 'days',
+            'numbercall': -1
+        })
+
+    def post_init_create_depreciation_cron(cr, registry):
+        env = api.Environment(cr, SUPERUSER_ID, {})
+        env['library.book']._create_depreciation_cron()
+
