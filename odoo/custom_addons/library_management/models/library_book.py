@@ -8,6 +8,7 @@ class LibraryBook(models.Model):
     author = fields.Char(required=True, default='Author')
     isbn = fields.Text(required=True, default='x'*10)
     category = fields.Many2one('book.category', string='Book category', ondelete='set null')
+    active = fields.Boolean(string='Active', default=True, readonly=True, help='if unchecked, the record will be archived')
     #depreciation controls availability status by rendering the book invaluable if it hits higher or equal to 80 percent thus being Removed
     depreciation = fields.Float(default=0, help='0-100%', readonly=True)
     depreciation_rate = fields.Float(required=True, default=0.0913)
@@ -23,6 +24,10 @@ class LibraryBook(models.Model):
         currentDate = fields.Date.context_today()
         daysPassedSinceAcquisition = currentDate - self.acquisition_date
         self.depreciation = min(100, self.depreciation_rate * daysPassedSinceAcquisition)
+        if self.depreciation >= 85:
+            self.availability_status = 'removed'
+            self.active = False
+
 
     def _create_depreciation_cron(self):
         self.env['ir.cron'].sudo().create({

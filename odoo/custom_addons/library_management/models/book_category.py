@@ -9,4 +9,4 @@ class BookCategory(models.Model):
     description = fields.Text()
     parent_id = fields.Many2one('book.category', string='Parent category', ondelete='set null')
     child_ids = fields.One2many('book.category', inverse_name='parent_id', string= 'Child categories')
-    active = fields.Boolean(string='Active', default=True, help='if unchecked, the record will be archived')
+    active = fields.Boolean(string='Active', default=True,readonly=True, help='if unchecked, the record will be archived')
