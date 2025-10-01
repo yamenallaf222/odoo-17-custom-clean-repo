@@ -13,10 +13,12 @@ class LibraryBook(models.Model):
     depreciation = fields.Float(default=0, help='0-100%', readonly=True)
     depreciation_rate = fields.Float(required=True, default=0.0913)
     availability_status = fields.Selection(
-        ('available', 'Available'),
-        ('borrowed', 'Borrowed'),
-        ('reserved', 'Reserved'),
-        ('removed', 'Removed')  
+        [
+            ('available', 'Available'),
+            ('borrowed', 'Borrowed'),
+            ('reserved', 'Reserved'),
+            ('removed', 'Removed')  
+        ]
     , default='available', readonly=True)
     acquisition_date = fields.Date(default=fields.Date.context_today, readonly=True)
 

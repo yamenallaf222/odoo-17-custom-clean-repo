@@ -11,11 +11,13 @@ class LibraryLoan(models.Model):
     loan_date = fields.Date(required=True, default= fields.Date.context_today)
     return_date = fields.Date(required=True, default= fields.Date.context_today + timedelta(days=3))
     state = fields.Selection(
-        ('draft', 'Draft'),
-        ('borrowed', 'Borrowed'),
-        ('returned', 'Returned'),
-        ('late', 'Late'),
-    default= 'draft')
+        [
+            ('draft', 'Draft'),
+            ('borrowed', 'Borrowed'),
+            ('returned', 'Returned'),
+            ('late', 'Late')
+        ]
+        , default= 'draft')
 
     @api.constrains('loan_date', 'return_date')
     def _check_dates_validity(self):
