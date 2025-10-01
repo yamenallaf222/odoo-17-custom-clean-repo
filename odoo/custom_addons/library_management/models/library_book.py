@@ -24,7 +24,9 @@ class LibraryBook(models.Model):
         currentDate = fields.Date.context_today()
         daysPassedSinceAcquisition = currentDate - self.acquisition_date
         self.depreciation = min(100, self.depreciation_rate * daysPassedSinceAcquisition)
-        if self.depreciation >= 85:
+        library_settings = self.env['library_settings'].search([], limit= 1)
+        
+        if self.depreciation >= library_settings.book_removal_depreciation_threshold:
             self.availability_status = 'removed'
             self.active = False
 
