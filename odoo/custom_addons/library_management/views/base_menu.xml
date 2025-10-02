@@ -1,0 +1,13 @@
+<odoo>
+    <menuitem 
+        id="library_root_menu"
+        name="Library"
+    />
+
+    <menuitem 
+        id="books_menu"
+        name="Books"
+        parent="library_root_menu"
+    />
+
+</odoo>

@@ -1,0 +1,42 @@
+<odoo>
+    <record id="book_view_tree" model="ir.ui.view">
+        <field name="name">Book tree</field>
+        <field name="model">library.book</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="title"/>
+                <field name="author"/>
+                <field name="isbn"/>
+                <field name="category"/>
+                <field name="active" invisible="True"/>
+                <field name="depreciation" invisible="True"/>
+                <field name="depreciation_rate" invisible="True"/>
+                <field name="availability_status" readonly="True"/>
+                <field name="acquisition_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="book_view_form" model="ir.ui.view">
+        <field name="name">Book form</field>
+        <field name="model">library.book</field>
+        <field name="arch" type="xml">
+            <form>
+                
+            </form>
+        </field>
+    </record>
+
+
+    <record id="book_view_action" model="ir.actions.act_window">
+        <field name="name">Book</field>
+        <field name="res_model">library.book</field>
+    </record>
+
+    <menuitem 
+        id="books_menu_item"
+        name="Books"
+        parent="books_menu"
+        action="book_view_action"
+    />
+</odoo>

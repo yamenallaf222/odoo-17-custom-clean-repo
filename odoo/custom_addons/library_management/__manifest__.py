@@ -6,6 +6,8 @@
     'depends' : ['base'
                  ],
     'data': [
+        'views/base_menu.xml',
+        'views/book_view.xml',
     ],
     'application': True,
     'post_init_hook': 'post_init_create_depreciation_cron'
