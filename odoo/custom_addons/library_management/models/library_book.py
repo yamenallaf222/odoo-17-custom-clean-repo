@@ -1,4 +1,4 @@
-from odoo import models, fields, api, SUPERUSER_ID
+from odoo import models, fields, api
 
 class LibraryBook(models.Model):
     _name = 'library.book'
@@ -32,7 +32,7 @@ class LibraryBook(models.Model):
             self.availability_status = 'removed'
             self.active = False
 
-
+    @api.model
     def _create_depreciation_cron(self):
         self.env['ir.cron'].sudo().create({
             'name': 'Update book depreciation',
@@ -44,7 +44,5 @@ class LibraryBook(models.Model):
             'numbercall': -1
         })
 
-    def post_init_create_depreciation_cron(cr, registry):
-        env = api.Environment(cr, SUPERUSER_ID, {})
-        env['library.book']._create_depreciation_cron()
+
 

@@ -6,7 +6,7 @@ class LibraryMember(models.Model):
     _description = 'Library member'
 
     name = fields.Char(required=True, default='new')
-    partner_id = fields.Many2one('res.partner', string='Contact info', ondelete='set null', required=True)
+    partner_id = fields.Many2one('res.partner', string='Contact info', ondelete='cascade', required=True)
     membership_type = fields.Many2one('library.membership', string='Membership type', ondelete='set null')
 
     _sql_constraints =[

@@ -9,7 +9,7 @@ class LibraryLoan(models.Model):
     book = fields.Many2one('library.book', string= 'Book', required=True)
     member = fields.Many2one('library.member', string= 'Member', required=True)
     loan_date = fields.Date(required=True, default= fields.Date.context_today)
-    return_date = fields.Date(required=True, default= fields.Date.context_today + timedelta(days=3))
+    return_date = fields.Date(required=True, default= lambda self: fields.Date.context_today(self) + timedelta(days=3))
     state = fields.Selection(
         [
             ('draft', 'Draft'),
