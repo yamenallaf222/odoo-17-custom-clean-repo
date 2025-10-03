@@ -1,0 +1,26 @@
+.book_availability_pill {
+    block-size: 35%;
+    display: inline-block;
+    padding: 4px 12px;      /* vertical and horizontal spacing */
+    margin: 12px 10px;
+    border-radius: 999px;   /* makes it fully rounded / ellipse */
+    background-color: inherit;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+
+.book_availability_pill.available {
+    background-color: green;
+}
+.book_availability_pill.borrowed {
+    background-color: blue;
+}
+.book_availability_pill.reserved {
+    background-color: orange;
+}
+
+.book_availability_pill.removed {
+    background-color: red;
+}

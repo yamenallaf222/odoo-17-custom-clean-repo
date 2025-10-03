@@ -9,6 +9,11 @@
         'views/base_menu.xml',
         'views/book_view.xml',
     ],
+    'assets':{
+        'web.assets_backend':[
+                '/library_management/static/src/css/book_kanban.css'
+            ]
+    },
     'application': True,
     'post_init_hook': 'post_init_create_depreciation_cron'
 }

@@ -5,8 +5,8 @@ class LibraryBook(models.Model):
     _description = 'Library Book'
 
     title = fields.Char(required=True, default='New')
-    author = fields.Char(required=True, default='Author')
-    isbn = fields.Text(required=True)
+    author = fields.Char(required=True)
+    isbn = fields.Text(required=True, help="International Standard Book Number")
     category = fields.Many2one('book.category', string='Book category', ondelete='set null')
     active = fields.Boolean(string='Active', default=True, readonly=True, help='if unchecked, the record will be archived')
     #depreciation controls availability status by rendering the book invaluable if it hits higher or equal to 80 percent thus being Removed

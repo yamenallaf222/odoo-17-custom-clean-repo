@@ -1,4 +1,42 @@
 <odoo>
+    <record id="book_kanban_view" model="ir.ui.view">
+        <field name="name">book.kanban.view</field>
+        <field name="model">library.book</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" >
+                <field name="title"/>
+                <field name="author"/>
+                <field name="category"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="row">
+                                <div class="col-12">
+                                    <strong>
+                                        <field name="title"/>
+                                    </strong>
+                                </div>
+                            </div>
+
+                            <div t-att-class="'book_availability_pill ' + (record.availability_status.raw_value)">
+                                <field name="availability_status"/>
+                            </div>
+
+                            <div> 
+                                <div>
+                                    <strong>Author: </strong> <t t-esc="record.author.raw_value"/>.                                         
+                                </div>
+                                <div>
+                                    <strong>Category: </strong> <t t-esc="record.category.name"/>.
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <record id="book_view_tree" model="ir.ui.view">
         <field name="name">Book tree</field>
         <field name="model">library.book</field>
@@ -22,15 +60,30 @@
         <field name="model">library.book</field>
         <field name="arch" type="xml">
             <form>
-                
+                <group col="2">
+                    <group string="Basic info.">
+                        <field name="title" placeholder="Title"/>
+                        <field name="author" placeholder="Author"/>
+                        <field name="category" placeholder="Category"/>
+                    </group>
+
+                    <group string="Advanced info.">
+                        <field name="isbn" string="ISBN"/>
+                        <field name="active" invisible="True"/>
+                        <field name="depreciation" invisible="True"/>
+                        <field name="depreciation_rate" invisible="True"/>
+                        <field name="availability_status" readonly="True"/>
+                        <field name="acquisition_date"/>
+                    </group>
+                </group>
             </form>
         </field>
     </record>
 
-
     <record id="book_view_action" model="ir.actions.act_window">
-        <field name="name">Book</field>
+        <field name="name">Books</field>
         <field name="res_model">library.book</field>
+        <field name="view_mode">kanban,list,form</field>
     </record>
 
     <menuitem 
