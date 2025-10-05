@@ -8,6 +8,7 @@
     'data': [
         'views/base_menu.xml',
         'views/book_view.xml',
+        'views/member_view.xml'
     ],
     'assets':{
         'web.assets_backend':[

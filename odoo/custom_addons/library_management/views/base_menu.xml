@@ -1,4 +1,5 @@
 <odoo>
+    
     <menuitem 
         id="library_root_menu"
         name="Library"
@@ -7,6 +8,11 @@
     <menuitem 
         id="books_menu"
         name="Books"
+        parent="library_root_menu"
+    />
+    <menuitem 
+        id="members_menu"
+        name="Members"
         parent="library_root_menu"
     />
 

@@ -4,36 +4,40 @@
         <field name="model">library.book</field>
         <field name="arch" type="xml">
             <kanban class="o_kanban_mobile" >
-                <field name="title"/>
-                <field name="author"/>
-                <field name="category"/>
                 <templates>
                     <t t-name="kanban-box">
                         <div t-attf-class="oe_kanban_global_click">
                             <div class="row">
-                                <div class="col-12">
+                                <div class="col-12 mb-1 d-flex justify-content-center">
                                     <strong>
                                         <field name="title"/>
                                     </strong>
                                 </div>
                             </div>
+                            
+                            <div> 
+
+                                <div>
+                                    <strong>Author: </strong> <field name="author"/>.
+                                </div>
+
+                                <div>
+                                    <strong>Category: </strong> <t t-esc="record.category ? record.category.name : 'None' + '.'"/>
+                                </div>
+
+                                <div>
+                                    <strong>Date added: </strong> <field name="acquisition_date"/>
+                                </div>
+                                
+                            </div>
 
                             <div t-att-class="'book_availability_pill ' + (record.availability_status.raw_value)">
                                 <field name="availability_status"/>
                             </div>
-
-                            <div> 
-                                <div>
-                                    <strong>Author: </strong> <t t-esc="record.author.raw_value"/>.                                         
-                                </div>
-                                <div>
-                                    <strong>Category: </strong> <t t-esc="record.category.name"/>.
-                                </div>
-                            </div>
                         </div>
                     </t>
                 </templates>
-            </kanban>
+            </kanban>   
         </field>
     </record>
 

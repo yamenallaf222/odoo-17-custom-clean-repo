@@ -20,7 +20,7 @@ class LibraryBook(models.Model):
             ('removed', 'Removed')  
         ]
     , default='available', readonly=True)
-    acquisition_date = fields.Date(default=fields.Date.context_today, readonly=True)
+    acquisition_date = fields.Date(required=True, default=fields.Date.context_today, readonly=True)
 
     def update_depreciation(self):
         currentDate = fields.Date.context_today()
