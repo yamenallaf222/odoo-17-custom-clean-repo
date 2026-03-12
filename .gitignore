@@ -49,3 +49,8 @@ package.json
 /man/
 /share/
 /src/
+/venv
+
+
+# include .vscode settings
+!/.vscode/

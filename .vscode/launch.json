@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Odoo Debug",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/odoo-bin",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "python": "${workspaceFolder}/venv/Scripts/python",
+            "args": [
+                "-c",
+                "odoo.conf"
+            ],
+            "env": {
+                "PYTHONUNBUFFERED": "1"
+            }
+        }
+    ]
+}
