@@ -47,9 +47,13 @@
                         <field name="status" invisible="1"/>
                         <field name="assign_to" readonly="status == 'closed' or status == 'completed'"/>
                         <field name="due_date" readonly="status == 'closed' or status == 'completed'"/>
-                        <field name="estimated_time" string="Estimated Time(H)" readonly="status == 'closed' or status == 'completed'"/>
+                        <field name="client_id"/>
+                        <field name="currency_id"/>
+                        <field name="hourly_rate" widget="monetary"/>
+                        <field name="estimated_time" widget="float_time" string="Estimated Time(H)" readonly="status == 'closed' or status == 'completed'"/>
+                        <field name="total_amount" widget="monetary"/>
                         <field name="active" readonly="status == 'closed' or status == 'completed'"/>
-                        <field name="is_late" invisible="1" readonly="status == 'closed' or status == 'completed'"/>                        
+                        <field name="is_late" invisible="1" readonly="status == 'closed' or status == 'completed'"/>
                     </group>
 
                     <group>

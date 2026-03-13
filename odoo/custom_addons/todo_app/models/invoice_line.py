@@ -6,7 +6,7 @@ class InvoiceLine(models.Model):
     _name = 'invoice.line'
     _description = 'Invoice Line'
 
-    tasks = fields.One2many('todo.task')
+    tasks = fields.One2many('todo.task', inverse_name='invoice_line_id')
     client_id = fields.Many2one('res.partner')
     total_hours = fields.Float(compute= '_compute_total_hours')
     total_amount = fields.Monetary(string= 'Total Amount', currency_field='currency_id', compute= '_compute_total_amount')

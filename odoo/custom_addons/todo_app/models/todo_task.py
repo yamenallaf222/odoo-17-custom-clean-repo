@@ -11,12 +11,12 @@ class TodoTask(models.Model):
     name = fields.Char(required=True, default='New', tracking=1)
     assign_to = fields.Many2many('res.partner', string='Assigned To', tracking=1)
     description = fields.Text(tracking=1)
-    hourly_rate = fields.Float(default = 25.0)
-    client_id = fields.Many2one('res.partner')
     due_date = fields.Date(tracking=1)
-    # FIX THESE TWO FIELDS THEY ARE CAUSING INTERNAL SERVER ERROR //TODO
+    hourly_rate = fields.Monetary(default = 25.0, currency_field= 'currency_id')
+    client_id = fields.Many2one('res.partner', string= 'Client')
     total_amount = fields.Monetary(string= 'Total Amount', currency_field= 'currency_id', compute= '_compute_total_amount')
     currency_id = fields.Many2one('res.currency', string= 'Currency', default= lambda self: self.env.company.currency_id)
+    invoice_line_id = fields.Many2one('invoice.line', string= 'Invoice Line')
     is_late = fields.Boolean()
     status = fields.Selection([
         ('new','New'),
@@ -26,14 +26,15 @@ class TodoTask(models.Model):
     ], default='new', tracking=1)
     estimated_time = fields.Float(required=True, default=10.0)
     timesheet_line_ids = fields.One2many('timesheet.line', inverse_name='todo_task_id')
-    timesheet_lines_total_time = fields.Float(string="Total Time", compute="_compute_total_time", store="1")
+    timesheet_lines_total_time = fields.Float(string="Total Time", compute="_compute_total_time", store=True)
+
 
     active = fields.Boolean(default=1)
 
-    @api.depends('duration_minutes', 'hourly_rate')
+    @api.depends('estimated_time', 'hourly_rate')
     def _compute_total_amount(self):
         for rec in self:
-            rec.total_amount = rec.duration_muinutes * rec.hourly_rate
+            rec.total_amount = rec.estimated_time * rec.hourly_rate
 
 
     @api.depends('timesheet_line_ids.time')

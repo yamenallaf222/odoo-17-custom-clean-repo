@@ -11,7 +11,11 @@
             "python": "${workspaceFolder}/venv/Scripts/python",
             "args": [
                 "-c",
-                "odoo.conf"
+                "odoo.conf",
+                "-u",
+                "todo_app",
+                "-d",
+                "todo_app"
             ],
             "env": {
                 "PYTHONUNBUFFERED": "1"
