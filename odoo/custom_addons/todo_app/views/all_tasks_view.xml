@@ -63,10 +63,10 @@
                         <page string="Sub-task">
                             <field name="timesheet_line_ids" readonly="status == 'closed' or status == 'completed'">
                                 <tree editable="bottom">
-                                    <field name="id" editable="0"/>
+                                    <field name="id" editable="0" />
                                     <field name="date" />
                                     <field name="description" />
-                                    <field name="time" string="Time(H)" />
+                                    <field name="time" widget="float_time" string="Time" />
                                 </tree>
                             </field>
                         </page>

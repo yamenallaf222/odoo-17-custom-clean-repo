@@ -13,5 +13,10 @@
         'wizard/build_task_assignment_wizard_view.xml',
         'reports/todo_task_report.xml'
     ],
+    'assets': {
+        'web.assets_backend': [
+            'todo_app/static/src/css/custom.css',
+        ],
+    },
     'application': True,
 }
