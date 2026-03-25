@@ -1,0 +1,15 @@
+{
+    "xml.symbols.enabled": false,
+    "python.languageServer": "None",
+    "simpleCodingTimeTracker.inactivityTimeout": 15,
+    "simpleCodingTimeTracker.focusTimeout": 15,
+    "simpleCodingTimeTracker.statusBar.showSeconds": true,
+    "simpleCodingTimeTracker.statusBar.icon": "$(code)",
+    "simpleCodingTimeTracker.statusBar.backgroundStyle": "warning",
+    "simpleCodingTimeTracker.statusBar.color": "",
+    "simpleCodingTimeTracker.health.enableNotifications": false,
+    "simpleCodingTimeTracker.health.modalNotifications": true,
+    "simpleCodingTimeTracker.health.eyeRestInterval": 20,
+    "simpleCodingTimeTracker.health.stretchInterval": 30,
+    "simpleCodingTimeTracker.health.breakThreshold": 90
+}

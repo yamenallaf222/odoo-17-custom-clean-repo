@@ -6,6 +6,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/odoo-bin",
+            "consoleName": "Odoo Python Debug Console",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
             "python": "${workspaceFolder}/venv/Scripts/python",
@@ -15,7 +16,8 @@
                 "-u",
                 "todo_app",
                 "-d",
-                "todo_app"
+                "todo_app",
+                "--dev=all"
             ],
             "env": {
                 "PYTHONUNBUFFERED": "1"
