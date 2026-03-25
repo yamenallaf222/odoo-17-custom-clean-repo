@@ -16,6 +16,8 @@
     'assets': {
         'web.assets_backend': [
             'todo_app/static/src/css/custom.css',
+            'todo_app/static/src/js/todo_timer_widget.js',
+            'todo_app/static/src/xml/todo_timer_widget.xml',
         ],
     },
     'application': True,

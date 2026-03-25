@@ -7,6 +7,7 @@ class TodoTask(models.Model):
     _description = 'Todo Task Record'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
+    timer_ids = fields.One2many('todo.timer', inverse_name='todo_task_id')
     ref = fields.Char(default='New', readonly=True)
     name = fields.Char(required=True, default='New', tracking=1)
     assign_to = fields.Many2many('res.partner', string='Assigned To', tracking=1)
@@ -117,7 +118,105 @@ class TimesheetLine(models.Model):
 
 
 
+class TodoTimer(models.Model):
+    _name = 'todo.timer'
+
+    # region Timer Implementation
+
+    todo_task_id = fields.Many2one('todo.task', required= True, ondelete='cascade')
+    start_time = fields.Datetime(string='Start At')
+    stop_time = fields.Datetime(string='Stopped At')
+    elapsed = fields.Float(string='Elapsed')
+    is_running = fields.Boolean(string='Running', default= False)
+        
+    @api.depends('start_time', 'stop_time')
+    def _compute_is_running(self):
+        for rec in self:
+            rec.is_running = bool(rec.start_time and not rec.stop_time)
+            
+    # region Timer RPC methods
+    @api.model
+    def action_start_timer(self, record_ids = None, **kwargs):
+        results = []
+
+        records = self.browse(record_ids)
+
+        print(records)
+
+        for rec in records:
+            rec.write(
+                {
+                    'start_time': fields.Datetime.now(),
+                    'stop_time': False,
+                    'is_running': True
+                }
+            )
+            
+            result_data =  {
+                'id': rec.id,
+                'start_time': rec.start_time and str(rec.start_time),
+                'stop_time': rec.stop_time and str(rec.stop_time),
+                'is_running': rec.is_running
+            }
+
+            results.append(result_data)
+        return results
+
+    @api.model
+    def action_stop_timer(self, record_ids = None, **kwargs):
+        results = []
+
+        records = self.browse(record_ids)
+
+        for rec in records:
+            if not rec.start_time:
+                raise ValidationError('Timer was not started.')
+
+            rec.write(
+                {
+                    'stop_time': fields.Datetime.now(),
+                    'is_running': False
+                }
+            )
+
+            result_data = {
+                'id': rec.id,
+                'stop_time': rec.stop_time,
+                'is_running': rec.is_running
+            }
+
+            results.append(result_data)
+        return results
+
+    @api.model
+    def update_live_elapsed(self, record_ids = None, **kwargs):
+        results = []
+
+        records = self.browse(record_ids)
+
+        for rec in records:
+            if not rec.start_time:
+                rec.elapsed = 0.0
+            
+            end = rec.stop_time or fields.Datetime.now()
+            delta = fields.Datetime.from_string(end) - fields.Datetime.from_string(rec.start_time)
+
+            # we re storing database field here 
+            rec.elapsed = delta.total_seconds()
+
+            result_data = {
+                'id': rec.id,
+                'elapsed': rec.elapsed
+            }
+
+            results.append(result_data)
+        return results
 
 
+    # def get_timer_is_running(record_ids, self):
+    #     for rec in self:
+    #         return [rec.read(['is_running'])[0]['is_running'] for rec in self.browse(record_ids)]
 
-   
+    # endregion
+
+    # endregion

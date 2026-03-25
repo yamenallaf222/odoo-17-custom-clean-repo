@@ -30,6 +30,17 @@
                         <button name="action_completed" type="object" class="btn-success" string="Completed"
                                 invisible="status != 'in_progress'"/>
                         <field name="status" widget="statusbar"/>
+                        <field name="timer_ids" widget="todo_timer_widget">
+                            <tree>
+                                <field name="id" invisible="True"/>
+                                <field name="todo_task_id" invisible="True" />
+                                <field name="start_time" invisible="True" />
+                                <field name="stop_time" invisible="True" />
+                                <field name="elapsed" invisible="True" />
+                                <field name="is_running" invisible="True" />
+                            </tree>
+
+                        </field>
                     </header>
                     <div class="oe_title">
                         <label for="ref"/>
