@@ -22,7 +22,7 @@
       <img width="1106" height="852" alt="image" src="https://github.com/user-attachments/assets/8dbbd4ee-3ecd-4d72-98f4-f2d114e7c854" />
 
 
-    * Channging the Status of the todo task ticket.
+    * Changing the Status of the todo task ticket.
 
       https://github.com/user-attachments/assets/53b0a0cf-4956-4afb-9aa8-2e99d7e6cabe
 
