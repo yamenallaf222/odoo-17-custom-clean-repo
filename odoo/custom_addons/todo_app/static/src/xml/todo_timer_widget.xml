@@ -3,7 +3,7 @@
         <div class="todo-timer-widget p-3 border rounded">
             
             <div class="mb-3">
-                <strong>Elapsed: <span t-esc="(state.elapsed || 0).toFixed(2)"> hours </span> </strong>
+                <strong>Elapsed: <span t-esc="formatTime(state.elapsed || 0)"> hours </span> </strong>
             </div>
 
             <div t-attf-class=" mb-3 text-muted + (state.running ? 'text-success' : 'text-danger')">

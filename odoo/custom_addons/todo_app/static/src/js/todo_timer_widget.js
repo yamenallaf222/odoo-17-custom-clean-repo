@@ -45,7 +45,7 @@ export class TodoTimerWidget extends Component {
 
         {
             // filter returns an empty array BUT FIND returns undefined
-            const timers = this.props.record.data.timer_ids.records.filter(r => r.data.todo_task_id[0] === this.props.record.resId)?.[0]; // the resId is the current todo_task_id ( the model record of the form view we re in)
+            const timers = this.props.record.data.timer_ids.records.filter(r => r.data.todo_task_id[0] === this.props.record.resId)?.[0] || []; // the resId is the current todo_task_id ( the model record of the form view we re in)
 
             if (timers.length === 0) {
 
@@ -116,26 +116,6 @@ export class TodoTimerWidget extends Component {
             }
         }
 
-
-        // if(timers.length === 0) {
-
-        //     console.log("Timers searched for:    ", timers);
-        //     const timer = await this.orm.read('todo.timer', timers);
-
-        //     this.state.elapsed = timer.elapsed;
-        //     this.state.stop_time = timer.stop_time;
-        //     this.state.start_time = timer.start_time;
-        //     this.state.running = timer.is_running;
-        //     console.log("\n\n\n\n\n\n\n\n\n\n");
-
-        //     console.log(timer);
-
-        // }
-
-            
-        // this.state.running = timer[0]?.is_running;
-        // this.state.elapsed = timer[0]?.elapsed;
-
     }
 
     onMounted() {
@@ -157,7 +137,7 @@ export class TodoTimerWidget extends Component {
                     console.error("Polling failed:", e);
                 }
             }
-        }, 950);  // ~1 second
+        }, 500);  // ~1 second
 
     }
 
@@ -222,6 +202,22 @@ debugger;
         }
 
     }
+
+    //region Helpers
+    formatTime(seconds) {
+
+        const days = Math.floor (seconds / (3600 * 24)).toString().padStart(2, '0');
+        const hrs = Math.floor(seconds / 3600).toString().padStart(2, '0');
+        const mins = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+        const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
+
+        
+
+        return `${days}:${hrs}:${mins}:${secs}`;
+    }
+
+
+    //endregion
 }
 
 

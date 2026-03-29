@@ -124,8 +124,8 @@ class TodoTimer(models.Model):
     # region Timer Implementation
 
     todo_task_id = fields.Many2one('todo.task', required= True, ondelete='cascade')
-    start_time = fields.Datetime(string='Start At')
-    stop_time = fields.Datetime(string='Stopped At')
+    start_time = fields.Datetime(string='Start At', default= False)
+    stop_time = fields.Datetime(string='Stopped At', default= False)
     elapsed = fields.Float(string='Elapsed')
     is_running = fields.Boolean(string='Running', default= False)
         
