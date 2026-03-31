@@ -18,8 +18,8 @@ export class TodoTimerWidget extends Component {
         this.notification = useService("notification");
         this.orm = useService("orm");
         this.state = useState({
-            start_time: null,
-            stop_time: null,
+            start_time: 'Never',
+            stop_time: 'Never',
             elapsed: 0,
             running: false
         });
@@ -39,53 +39,20 @@ export class TodoTimerWidget extends Component {
          * props var to finding that it lazy loads and does not contain all needed data to find out i need some kind field addition
          * to the xml field fo the widget to find the mess of the hierarchy of props accessing
          */
-        debugger;
+
 
         let timer = null;
 
         {
             // filter returns an empty array BUT FIND returns undefined
             const timers = this.props.record.data.timer_ids.records.filter(r => r.data.todo_task_id[0] === this.props.record.resId)?.[0] || []; // the resId is the current todo_task_id ( the model record of the form view we re in)
+            
+            debugger;
 
-            if (timers.length === 0) {
+            if (timers.length === 0) 
+                return;
 
-                const timerCreation = await this.orm.create('todo.timer', [{
-
-                    todo_task_id: this.props.record.resId, // parent_id
-                    elapsed: 0,
-
-                }]);
-
-                this.timerId = timerCreation?.[0];
-
-                if( this.timerId !== 0 && !this.timerId ) {
-
-                    //USER-FRIENDLY error
-                    this.notification.add("The timer of this task could not be fetched. Please contact your system's administrator", {
-                        title: "Validation Error",
-                        type: "danger",
-                        sticky: "false"
-                    });
-
-                    //developer debug log
-                    console.log("timerId is invalid with value:", this.timerId);
-
-                    // halt exec
-                    return;
-
-                }
-
-                const timerRecord = await this.orm.read('todo.timer',
-                    [this.timerId],
-                    ['start_time', 'stop_time', 'elapsed', 'is_running']
-                )
-
-                this.state.start_time = timerRecord.start_time;
-                this.state.stop_time = timerRecord.stop_time;
-                this.state.elapsed = timerRecord.elapsed;
-                this.state.running = timerRecord.is_running;
-
-            } else {
+            else {
 
                 console.log(timers);
 
@@ -153,6 +120,45 @@ debugger;
     async startTimer() {
 
         try {
+
+            if(!this.timerId)
+            {
+                const timerCreation = await this.orm.create('todo.timer', [{
+
+                    todo_task_id: this.props.record.resId, // parent_id
+                    elapsed: 0,
+
+                }]);
+
+                this.timerId = timerCreation?.[0];
+
+                if( this.timerId !== 0 && !this.timerId ) {
+
+                    //USER-FRIENDLY error
+                    this.notification.add("The timer of this task could not be fetched. Please contact your system's administrator", {
+                        title: "Validation Error",
+                        type: "danger",
+                        sticky: "false"
+                    });
+
+                    //developer debug log
+                    console.log("timerId is invalid with value:", this.timerId);
+
+                    // halt exec
+                    return;
+
+                }
+
+                const timerRecord = await this.orm.read('todo.timer',
+                    [this.timerId],
+                    ['start_time', 'stop_time', 'elapsed', 'is_running']
+                )
+
+                this.state.start_time = timerRecord.start_time;
+                this.state.stop_time = timerRecord.stop_time;
+                this.state.elapsed = timerRecord.elapsed;
+                this.state.running = timerRecord.is_running;
+            }
 
             const res = await this.orm.call(
                 "todo.timer", 

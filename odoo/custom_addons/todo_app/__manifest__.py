@@ -10,6 +10,7 @@
         'data/sequence.xml',
         'views/base_menu.xml',
         'views/all_tasks_view.xml',
+        'views/invoice_line.xml',
         'wizard/build_task_assignment_wizard_view.xml',
         'reports/todo_task_report.xml'
     ],

@@ -108,7 +108,7 @@ class TimesheetLine(models.Model):
     date = fields.Date(required=True)
     description = fields.Text(required=True)
     time = fields.Float(required=True)
-    todo_task_id = fields.Many2one('todo.task')
+    todo_task_id = fields.Many2one('todo.task', ondelete='cascade')
 
     @api.constrains('date')
     def _check_date_not_greater_than_task_date(self):
@@ -123,7 +123,7 @@ class TodoTimer(models.Model):
 
     # region Timer Implementation
 
-    todo_task_id = fields.Many2one('todo.task', required= True, ondelete='cascade')
+    todo_task_id = fields.Many2one('todo.task', ondelete='cascade')
     start_time = fields.Datetime(string='Start At', default= False)
     stop_time = fields.Datetime(string='Stopped At', default= False)
     elapsed = fields.Float(string='Elapsed')

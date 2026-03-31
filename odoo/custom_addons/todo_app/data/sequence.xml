@@ -6,5 +6,12 @@
             <field name="prefix">TS</field>
             <field name="padding">5</field>
         </record>
+
+        <record id="invoice_line_sequence" model="ir.sequence">
+            <field name="name">Invoice Line Seq</field>
+            <field name="code">invoice_line_seq</field>
+            <field name="prefix">IL</field>
+            <field name="padding">5</field>
+        </record>
     </data>
 </odoo>
