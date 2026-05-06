@@ -1,0 +1,10 @@
+<odoo>
+
+    <record id="invoice_line_form_view_wizard_action" model="ir.actions.act_window">
+        <field name="name">Invoice Line Form View Wizard</field>
+        <field name="res_model">invoice.line</field>
+        <field name="target">new</field>
+        <field name="view_mode">form</field>
+    </record>
+    
+</odoo>

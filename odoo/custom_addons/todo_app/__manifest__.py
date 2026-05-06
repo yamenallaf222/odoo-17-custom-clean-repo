@@ -12,6 +12,7 @@
         'views/all_tasks_view.xml',
         'views/invoice_line.xml',
         'wizard/build_task_assignment_wizard_view.xml',
+        'wizard/invoice_line_form_view_wizard.xml',
         'reports/todo_task_report.xml'
     ],
     'assets': {

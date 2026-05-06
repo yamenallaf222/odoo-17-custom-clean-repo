@@ -70,6 +70,11 @@
                     <group>
                         <field name="description" readonly="status == 'closed' or status == 'completed'"/>
                     </group>
+                    <div class="d-flex justify-content-end">
+                        <!-- @TODO  implement "creating invoice" wizard trigger -->
+                        <button name="action_new_invoice" type="object" class="btn-primary" string="Create New Invoice"
+                                invisible="not id"/>
+                    </div>
                     <notebook>
                         <page string="Sub-task">
                             <field name="timesheet_line_ids" readonly="status == 'closed' or status == 'completed'">
@@ -141,6 +146,7 @@
                 <filter name="group_assign_to" string="Assign to" context="{'group_by': 'assign_to'}"/>
                 <filter name="group_status" string="Status" context="{'group_by': 'status'}"/>
                 <filter name="group_due_date" string="Due date" context="{'group_by': 'due_date'}"/>
+                <filter name="group_due_date" string="Client" context="{'group_by': 'client_id'}"/>
             </search>
         </field>
     </record>

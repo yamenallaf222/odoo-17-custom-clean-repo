@@ -50,6 +50,13 @@ class TodoTask(models.Model):
             if rec.estimated_time < total_time:
                 raise ValidationError("Please make sure the total time of Timesheet lines is not greater than estimated time")
 
+    def action_new_invoice(self):
+        action = self.env['ir.actions.actions']._for_xml_id('todo_app.invoice_line_form_view_wizard_action')
+        action['context'] = { 
+            'default_task_ids': [(4, self.id)]
+            }
+
+        return action
 
 
     def action_new(self):
