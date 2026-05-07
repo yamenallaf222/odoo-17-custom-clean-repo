@@ -53,7 +53,8 @@ class TodoTask(models.Model):
     def action_new_invoice(self):
         action = self.env['ir.actions.actions']._for_xml_id('todo_app.invoice_line_form_view_wizard_action')
         action['context'] = { 
-            'default_task_ids': [(4, self.id)]
+            'default_task_ids': [(4, self.id)],
+            'default_client_id': self.client_id.id
             }
 
         return action

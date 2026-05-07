@@ -4,8 +4,9 @@
         <field name="model">invoice.line</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="task_ids"/>
+                <field name="name"/>
                 <field name="client_id"/>
+                <field name="task_ids" widget="many2many_tags"/>
                 <field name="total_hours"/>
                 <field name="total_amount"/>
                 <field name="currency_id" optional="1"/>
