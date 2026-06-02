@@ -1,0 +1,27 @@
+# --- Python Bytecode & Cache ---
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+
+# --- IDEs & Editors ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- OS Specific ---
+.DS_Store
+Thumbs.db
+
+# --- Odoo Runtime & Log Files ---
+*.log
+*.pid
+# If you run a local data directory inside this repo path:
+filestore/
+sessions/
+
+# --- Backup & Temporary Files ---
+*.bak
+*~
